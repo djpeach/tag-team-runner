@@ -9,8 +9,8 @@ export default class Ninja extends Character {
 
   setupMovement() {
     super.setupMovement();
-    this.setMaxVelocity(750, 750);
-    this.setDragX(1250);
+    this.setMaxVelocity(550, 550);
+    this.setDragX(5000);
     this.setSize(15, 29);
     this.setOffset(4, 2);
     this.setOrigin(0.5, 1);
@@ -57,7 +57,7 @@ export default class Ninja extends Character {
       ],
       methods: {
         onEnterState: (lifecycle) => {
-          this.anims.play(`knight-${lifecycle.to}`);
+          this.anims.play(`ninja-${lifecycle.to}`);
         },
       },
     });

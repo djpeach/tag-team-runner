@@ -1,7 +1,8 @@
 import 'phaser';
 import Knight from '../entities/Knight';
+import Ninja from '../entities/Ninja';
 
-export default class BootScene extends Phaser.Scene {
+export default class GameScene extends Phaser.Scene {
   constructor(key) {
     super(key);
   }
@@ -27,6 +28,20 @@ export default class BootScene extends Phaser.Scene {
     this.buildLevel();
     this.addPlayer();
     this.configureCamera();
+    this.input.keyboard.on(
+      'keydown',
+      function (e) {
+        switch (e.code) {
+          case 'Numpad1':
+            this.switchToKnight();
+            break;
+          case 'Numpad2':
+            this.switchToNinja();
+            break;
+        }
+      },
+      this
+    );
   }
 
   buildLevel() {
@@ -72,10 +87,23 @@ export default class BootScene extends Phaser.Scene {
       this.mapObjects.Start.y
     );
 
-    this.player = this.knight;
+    this.knight.active = false;
+    this.knight.alpha = 0;
+
+    this.ninja = new Ninja(
+      this,
+      this.mapObjects.Start.x,
+      this.mapObjects.Start.y
+    );
+
+    this.player = this.ninja;
 
     this.physics.add.collider(
-      this.player,
+      this.knight,
+      this.map.getLayer('Ground').tilemapLayer
+    );
+    this.physics.add.collider(
+      this.ninja,
       this.map.getLayer('Ground').tilemapLayer
     );
   }
@@ -88,6 +116,42 @@ export default class BootScene extends Phaser.Scene {
       this.map.heightInPixels
     );
     this.cameras.main.startFollow(this.player, true);
+  }
+
+  switchToKnight() {
+    this.player.active = false;
+    this.player.alpha = 0;
+    this.knight.active = true;
+    this.knight.alpha = 1;
+    this.knight.setVelocity(
+      this.player.body.velocity.x,
+      this.player.body.velocity.y
+    );
+    this.knight.setAcceleration(
+      this.player.body.acceleration.x,
+      this.player.body.acceleration.y
+    );
+    this.knight.setPosition(this.player.x, this.player.y);
+    this.player = this.knight;
+    this.cameras.main.startFollow(this.player);
+  }
+
+  switchToNinja() {
+    this.player.active = false;
+    this.player.alpha = 0;
+    this.ninja.active = true;
+    this.ninja.alpha = 1;
+    this.ninja.setVelocity(
+      this.player.body.velocity.x,
+      this.player.body.velocity.y
+    );
+    this.ninja.setAcceleration(
+      this.player.body.acceleration.x,
+      this.player.body.acceleration.y
+    );
+    this.ninja.setPosition(this.player.x, this.player.y);
+    this.player = this.ninja;
+    this.cameras.main.startFollow(this.player);
   }
 
   update(time, delta) {}
