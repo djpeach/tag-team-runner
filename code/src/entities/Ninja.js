@@ -2,15 +2,15 @@ import 'phaser';
 import StateMachine from 'javascript-state-machine';
 import Character from './Character';
 
-export default class Knight extends Character {
+export default class Ninja extends Character {
   constructor(scene, x, y) {
-    super(scene, x, y, 'knight-idle-sheet', 0);
+    super(scene, x, y, 'ninja-idle-sheet', 0);
   }
 
   setupMovement() {
     super.setupMovement();
-    this.setMaxVelocity(400, 400);
-    this.setDragX(2500);
+    this.setMaxVelocity(750, 750);
+    this.setDragX(1250);
     this.setSize(15, 29);
     this.setOffset(4, 2);
     this.setOrigin(0.5, 1);
@@ -70,7 +70,8 @@ export default class Knight extends Character {
         return (
           this.body.onFloor() &&
           // check velocity exists, and matches the flip value
-          Math.sign(this.body.velocity.x) === (this.flipX ? -1 : 1)
+          Math.sign(this.body.velocity.x) === (this.flipX ? -1 : 1) &&
+          false
         );
       },
       jump: () => {

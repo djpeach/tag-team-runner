@@ -28,6 +28,7 @@ export default class BootScene extends Phaser.Scene {
 
   loadCharacters() {
     this.loadKnight();
+    this.loadNinja();
   }
 
   loadKnight() {
@@ -49,24 +50,39 @@ export default class BootScene extends Phaser.Scene {
     );
   }
 
-  loadNinja() {}
+  loadNinja() {
+    this.load.spritesheet(
+      'ninja-idle-sheet',
+      'assets/characters/ninja/idle.png',
+      {
+        frameWidth: 32,
+        frameHeight: 32,
+      }
+    );
+  }
 
   animateCharacters() {
     this.animateKnight();
+    this.animateNinja();
   }
 
   animateKnight() {
     this.anims.create({
       key: 'knight-idle',
       frames: this.anims.generateFrameNumbers('knight-idle-sheet'),
-      frameRate: 10,
-      repeat: -1,
     });
     this.anims.create({
       key: 'knight-running',
       frames: this.anims.generateFrameNumbers('knight-run-sheet'),
       frameRate: 10,
       repeat: -1,
+    });
+  }
+
+  animateNinja() {
+    this.anims.create({
+      key: 'ninja-idle',
+      frames: this.anims.generateFrameNumbers('ninja-idle-sheet'),
     });
   }
 }

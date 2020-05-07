@@ -88,7 +88,6 @@ export default class BootScene extends Phaser.Scene {
       this.map.heightInPixels
     );
     this.cameras.main.startFollow(this.player, true);
-    // this.cameras.main.setZoom(2);
   }
 
   update(time, delta) {}
