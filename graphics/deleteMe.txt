@@ -1,2 +1,0 @@
-Store all asset pipeline files here
-(tiled, texture packer, photoshop, etc)
