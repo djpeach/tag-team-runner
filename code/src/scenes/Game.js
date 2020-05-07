@@ -1,13 +1,13 @@
 import 'phaser';
 
 export default class BootScene extends Phaser.Scene {
-  constructor (key) {
+  constructor(key) {
+    super(key);
   }
 
-  init(data) {
-  }
+  init(data) {}
 
-  preload () {
+  preload() {
     this.scale.on('resize', this.resize, this);
 
     this.cursors = this.input.keyboard.addKeys({
@@ -15,18 +15,26 @@ export default class BootScene extends Phaser.Scene {
       down: Phaser.Input.Keyboard.KeyCodes.S,
       left: Phaser.Input.Keyboard.KeyCodes.A,
       right: Phaser.Input.Keyboard.KeyCodes.D,
-      b_1: Phaser.Input.Keyboard.KeyCodes.Q,
-      b_2: Phaser.Input.Keyboard.KeyCodes.E,
+      b_1: Phaser.Input.Keyboard.KeyCodes.NUMPAD_ONE,
+      b_2: Phaser.Input.Keyboard.KeyCodes.NUMPAD_TWO,
+      b_3: Phaser.Input.Keyboard.KeyCodes.NUMPAD_THREE,
+      space: Phaser.Input.Keyboard.KeyCodes.SPACE,
     });
   }
 
-  create () {
+  create() {
+    this.knight = this.physics.add.sprite(
+      this.sys.game.config.width / 2,
+      this.sys.game.config.height / 2,
+      'knight-idle-sheet',
+      0
+    );
+    this.knight.setScale(2);
   }
 
-  update(time, delta) {
-  }
+  update(time, delta) {}
 
-  resize (gameSize, baseSize, displaySize, resolution) {
+  resize(gameSize, baseSize, displaySize, resolution) {
     let width = gameSize.width;
     let height = gameSize.height;
     if (width === undefined) {
@@ -37,4 +45,4 @@ export default class BootScene extends Phaser.Scene {
     }
     this.cameras.resize(width, height);
   }
-};
+}

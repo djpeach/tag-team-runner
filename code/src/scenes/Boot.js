@@ -1,14 +1,22 @@
 import 'phaser';
 
 export default class BootScene extends Phaser.Scene {
-  constructor (key) {
+  constructor(key) {
     super(key);
   }
 
-  preload () {
+  preload() {
+    this.load.spritesheet(
+      'knight-idle-sheet',
+      'assets/characters/knight/idle.png',
+      {
+        frameWidth: 32,
+        frameHeight: 32,
+      }
+    );
   }
 
-  create () {
+  create() {
     this.scene.start('Game');
   }
-};
+}
