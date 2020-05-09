@@ -29,7 +29,7 @@ export default class Knight extends Character {
     });
     this.moveState.predicates = {
       jump: () => {
-        return this.input.didPressJump;
+        return this.input.didPressJump && this.body.onFloor();
       },
       land: () => {
         return this.body.onFloor();
