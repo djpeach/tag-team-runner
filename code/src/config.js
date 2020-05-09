@@ -1,8 +1,8 @@
 export default {
   type: Phaser.AUTO,
   scale: {
-    width: 800,
-    height: 600,
+    width: window.innerWidth,
+    height: window.innerHeight,
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },

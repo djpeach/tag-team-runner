@@ -88,11 +88,11 @@ export default class Ninja extends Character {
 
     if (this.keys.left.isDown) {
       // acceleration is per second, so 1000 units/s = 250 in .25 seconds, 500 in .5 seconds, 1500 in 1.5 seconds, etc
-      this.body.setAccelerationX(-1000);
+      this.body.setAccelerationX(-2500);
       this.setFlipX(true);
       this.setOffset(10, 2);
     } else if (this.keys.right.isDown) {
-      this.body.setAccelerationX(1000);
+      this.body.setAccelerationX(2500);
       this.setFlipX(false);
       this.setOffset(4, 2);
     } else {
