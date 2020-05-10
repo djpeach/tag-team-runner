@@ -41,17 +41,17 @@ export default class Knight extends Character {
     this.animState = new StateMachine({
       init: 'idle',
       transitions: [
-        { name: 'idle', from: ['falling', 'running', 'jumping'], to: 'idle' },
-        { name: 'run', from: ['falling', 'idle', 'jumping'], to: 'running' },
-        { name: 'jump', from: ['idle', 'running'], to: 'jumping' },
+        { name: 'idle', from: ['falling', 'running', 'jumping'], to: 'idling' },
+        { name: 'run', from: ['falling', 'idling', 'jumping'], to: 'running' },
+        { name: 'jump', from: ['idling', 'running'], to: 'jumping' },
         {
           name: 'fall',
-          from: ['idle', 'running', 'jumping'],
+          from: ['idling', 'running', 'jumping'],
           to: 'falling',
         },
         {
           name: 'die',
-          from: ['idle', 'running', 'jumping', 'falling'],
+          from: ['idling', 'running', 'jumping', 'falling'],
           to: 'dead',
         },
       ],

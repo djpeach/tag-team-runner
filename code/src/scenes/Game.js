@@ -33,9 +33,11 @@ export default class GameScene extends Phaser.Scene {
       function (e) {
         switch (e.code) {
           case 'Numpad1':
+          case 'One':
             this.switchToKnight();
             break;
           case 'Numpad2':
+          case 'Two':
             this.switchToNinja();
             break;
         }
@@ -45,19 +47,18 @@ export default class GameScene extends Phaser.Scene {
   }
 
   buildLevel() {
-    this.map = this.make.tilemap({ key: 'level-1' });
-    this.map;
-    const groundTiles = this.map.addTilesetImage('world-1', 'world-1-sheet');
+    this.map = this.make.tilemap({ key: 'level-2' });
+    const groundTiles = this.map.addTilesetImage('level-tiles', 'level-tiles-sheet');
     const backgroundTiles = this.map.addTilesetImage('clouds', 'clouds-sheet');
+
+    const groundLayer = this.map.createStaticLayer('Ground', groundTiles);
+    groundLayer.setCollisionByExclusion([-1], true);
 
     const backgroundLayer = this.map.createStaticLayer(
       'Background',
       backgroundTiles
     );
     backgroundLayer.setScrollFactor(0.6);
-
-    const groundLayer = this.map.createStaticLayer('Ground', groundTiles);
-    groundLayer.setCollision([1, 2, 4], true);
 
     this.physics.world.setBounds(
       0,
@@ -73,8 +74,6 @@ export default class GameScene extends Phaser.Scene {
         this.mapObjects.Start = val;
       }
     });
-
-    this.map.createStaticLayer('Foreground', groundTiles);
 
     // const debugGraphics = this.add.graphics();
     // groundLayer.renderDebug(debugGraphics);

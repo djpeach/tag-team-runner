@@ -18,12 +18,21 @@ export default class Ninja extends Character {
     this.moveState = new StateMachine({
       init: 'grounded',
       transitions: [
-        { name: 'jump', from: ['grounded'], to: 'jumping' },
-        { name: 'land', from: ['jumping'], to: 'grounded' },
+        { name: 'jump', from: ['grounded', 'wallGrabbing'], to: 'jumping' },
+        { name: 'flip', from: ['jumping', 'falling'], to: 'flipping' },
+        { name: 'land', from: ['jumping', 'flipping', 'falling'], to: 'grounded' },
+        { name: 'wallGrab', from: ['jumping', 'flipping', 'falling'], to: 'wallGrabbing' },
+        { name: 'fall', from: ['jumping', 'flipping', 'wallGrabbing', 'grounded'], to: 'falling' },
       ],
       methods: {
         onJump: () => {
           this.body.setVelocityY(-400);
+        },
+        onFlip: () => {
+          this.body.setVelocityY(-300);
+        },
+        onWallGrab: () => {
+          this.body.setVelocity(0, 0);
         },
       },
     });
@@ -31,9 +40,18 @@ export default class Ninja extends Character {
       jump: () => {
         return this.input.didPressJump;
       },
+      flip: () => {
+        return this.input.didPressJump;
+      },
       land: () => {
         return this.body.onFloor();
       },
+      wallGrab: () => {
+        return false; // return colliding on x
+      },
+      fall: () => {
+        return this.body.velocity.y > 0;
+      }
     };
   }
 
@@ -41,22 +59,25 @@ export default class Ninja extends Character {
     this.animState = new StateMachine({
       init: 'idle',
       transitions: [
-        { name: 'idle', from: ['falling', 'running', 'jumping'], to: 'idle' },
-        { name: 'run', from: ['falling', 'idle', 'jumping'], to: 'running' },
-        { name: 'jump', from: ['idle', 'running'], to: 'jumping' },
+        { name: 'idle', from: ['falling', 'running', 'jumping', 'flipping'], to: 'idling' },
+        { name: 'run', from: ['falling', 'idling', 'jumping', 'flipping'], to: 'running' },
+        { name: 'jump', from: ['idling', 'running'], to: 'jumping' },
+        { name: 'flip', from: ['jumping', 'falling'], to: 'flipping' },
+        { name: 'wall-jump', from: ['jumping', 'falling'], to: 'flipping' },
         {
           name: 'fall',
-          from: ['idle', 'running', 'jumping'],
+          from: ['idling', 'running', 'jumping'],
           to: 'falling',
         },
         {
           name: 'die',
-          from: ['idle', 'running', 'jumping', 'falling'],
+          from: ['idling', 'running', 'jumping', 'falling'],
           to: 'dead',
         },
       ],
       methods: {
         onEnterState: (lifecycle) => {
+          console.log(lifecycle.from, lifecycle.to);
           this.anims.play(`ninja-${lifecycle.to}`);
         },
       },
@@ -69,13 +90,14 @@ export default class Ninja extends Character {
       run: () => {
         return (
           this.body.onFloor() &&
-          // check velocity exists, and matches the flip value
-          Math.sign(this.body.velocity.x) === (this.flipX ? -1 : 1) &&
-          false
+          Math.abs(this.body.velocity.x) > 0
         );
       },
       jump: () => {
-        return this.body.velocity.y < 0 && false;
+        return this.body.velocity.y < 0;
+      },
+      flip: () => {
+        return this.body.velocity < 0 && this.moveState.is('flipping')
       },
       fall: () => {
         return this.body.velocity.y > 0 && false;
