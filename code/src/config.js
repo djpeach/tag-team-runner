@@ -17,10 +17,10 @@ export default {
       gravity: {
         y: 750,
       },
-      // debug: true,
-      // debugShowVelocity: true,
-      // debugShowBody: true,
-      // debugShowStaticdBody: true,
+      debug: true,
+      debugShowVelocity: true,
+      debugShowBody: true,
+      debugShowStaticdBody: true,
     },
   },
 };

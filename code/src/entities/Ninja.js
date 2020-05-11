@@ -11,8 +11,8 @@ export default class Ninja extends Character {
     super.setupMovement();
     this.setMaxVelocity(550, 550);
     this.setDragX(5000);
-    this.setSize(15, 29);
-    this.setOffset(4, 2);
+    this.setSize(9, 26);
+    this.setOffset(13, 5);
     this.setOrigin(0.5, 1);
 
     this.moveState = new StateMachine({
@@ -21,15 +21,18 @@ export default class Ninja extends Character {
         { name: 'jump', from: ['grounded', 'wallGrabbing'], to: 'jumping' },
         { name: 'flip', from: ['jumping', 'falling'], to: 'flipping' },
         { name: 'land', from: ['jumping', 'flipping', 'falling'], to: 'grounded' },
-        { name: 'wallGrab', from: ['jumping', 'flipping', 'falling'], to: 'wallGrabbing' },
-        { name: 'fall', from: ['jumping', 'flipping', 'wallGrabbing', 'grounded'], to: 'falling' },
+        { name: 'wallGrab', from: ['falling', 'jumping', 'flipping'], to: 'wallGrabbing' },
+        { name: 'fall', from: ['wallGrabbing', 'grounded'], to: 'falling' },
       ],
       methods: {
+        onEnterState: (lifecycle) => {
+          console.log(lifecycle.from, ' -> ', lifecycle.to);
+        },
         onJump: () => {
           this.body.setVelocityY(-400);
         },
         onFlip: () => {
-          this.body.setVelocityY(-300);
+          this.body.setVelocityY(-400);
         },
         onWallGrab: () => {
           this.body.setVelocity(0, 0);
@@ -47,7 +50,9 @@ export default class Ninja extends Character {
         return this.body.onFloor();
       },
       wallGrab: () => {
-        return false; // return colliding on x
+        let grabRight = this.body.blocked.right && this.keys.right.isDown;
+        let grabLeft = this.body.blocked.left && this.keys.left.isDown;
+        return (grabRight || grabLeft) && !this.body.blocked.down && this.body.velocity.y > 0;
       },
       fall: () => {
         return this.body.velocity.y > 0;
@@ -110,13 +115,13 @@ export default class Ninja extends Character {
 
     if (this.keys.left.isDown) {
       // acceleration is per second, so 1000 units/s = 250 in .25 seconds, 500 in .5 seconds, 1500 in 1.5 seconds, etc
-      this.body.setAccelerationX(-2500);
+      this.body.setAccelerationX(-1000);
       this.setFlipX(true);
-      this.setOffset(10, 2);
+      this.setOffset(10, 5);
     } else if (this.keys.right.isDown) {
-      this.body.setAccelerationX(2500);
+      this.body.setAccelerationX(1000);
       this.setFlipX(false);
-      this.setOffset(4, 2);
+      this.setOffset(13, 5);
     } else {
       this.body.setAccelerationX(0);
     }
